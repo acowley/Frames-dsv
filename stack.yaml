@@ -1,0 +1,4 @@
+# resolver: lts-12.10
+resolver: ghc-8.4.3
+packages:
+- .
