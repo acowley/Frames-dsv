@@ -11,7 +11,10 @@ packageSet = pkgs.haskell.packages.${compiler};
       packageSet.override {
         overrides = (self: super: {
         ghc = super.ghc // { withPackages = f: super.ghc.withHoogle (ps: f ps ++ [ps.intero ps.cabal-install ]); };
-          vinyl = super.callPackage ~/Projects/Vinyl {};
+          vinyl = pkgs.haskell.lib.dontCheck (super.callPackage ~/Projects/Vinyl {});
+          Frames = pkgs.haskell.lib.dontBenchmark
+                     (pkgs.haskell.lib.dontCheck
+                       (super.callPackage ~/Projects/Frames {}));
           intero = pkgs.haskell.lib.dontCheck (super.callPackage ~/src/intero {});
           hw-rankselect = super.callHackage "hw-rankselect" "0.12.0.4" {};
           ghcWithPackages = self.ghc.withPackages;
