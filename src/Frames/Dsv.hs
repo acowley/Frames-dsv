@@ -1,6 +1,7 @@
 {-# LANGUAGE TypeOperators #-}
 module Frames.Dsv where
 import Control.Monad (when)
+import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as LBS
 import Data.Maybe (isNothing)
 import Data.Text (Text)
@@ -27,30 +28,29 @@ import Language.Haskell.TH
 -- * Row Reading
 
 -- | Produce one DSV row at a time.
-rowLoop :: Monad m => SVL.DsvCursor -> Producer [LBS.ByteString] m ()
+rowLoop :: Monad m => SVL.DsvCursor -> Producer [BS.ByteString] m ()
 rowLoop c =
   if SVL.dsvCursorPosition d > SVL.dsvCursorPosition c && not (SVL.atEnd c)
-  then yield (V.toList (SVL.getRowBetween c d dEnd)) >> rowLoop (SVL.trim d)
+  then do yield (V.toList (SVL.getRowBetweenStrict c d dEnd))
+          rowLoop (SVL.trim d)
   else return ()
   where nr = SVL.nextRow c
         d = SVL.nextPosition nr
         dEnd = SVL.atEnd nr
 
 -- | Produce rows of raw 'LBS.ByteString' values.
-dsvRowsByte :: MonadIO m => FilePath -> Word8 -> Producer [LBS.ByteString] m ()
+dsvRowsByte :: MonadIO m => FilePath -> Word8 -> Producer [BS.ByteString] m ()
 dsvRowsByte fp columnSeparator =
   do bs <- P.liftIO (LBS.readFile fp)
      rowLoop (SVL.makeCursor columnSeparator bs)
 
 -- | Produce rows of UTF-8 encoded 'Text' values.
 dsvRows' :: MonadIO m => FilePath -> Word8 -> Producer [Text] m ()
-dsvRows' fp = (>-> P.map (map (T.decodeUtf8 . LBS.toStrict)))
-           . dsvRowsByte fp
+dsvRows' fp = (>-> P.map (map T.decodeUtf8)) . dsvRowsByte fp
 
 -- | Produce rows of Latin-1 (aka ISO-8859-1) encoded 'Text' values.
 dsvRowsLatin1' :: MonadIO m => FilePath -> Word8 -> Producer [Text] m ()
-dsvRowsLatin1' fp = (>-> P.map (map (T.decodeLatin1 . LBS.toStrict)))
-                  . dsvRowsByte fp
+dsvRowsLatin1' fp = (>-> P.map (map T.decodeLatin1)) . dsvRowsByte fp
 
 -- | Call 'error' indicating the problem with a separator intended for
 -- use with the @hw-dsv@ library.

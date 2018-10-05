@@ -20,7 +20,7 @@ library
                      , bytestring
                      , Frames
                      , vinyl
-                     , hw-dsv >= 0.2 && < 0.4
+                     , hw-dsv >= 0.3 && < 0.4
                      , pipes >= 4.1 && < 5
                      , text
                      , vector
