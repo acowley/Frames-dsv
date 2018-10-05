@@ -1,16 +1,22 @@
 name:                Frames-dsv
 version:             0.1.0.0
--- synopsis:
--- description:
+synopsis:            Alternative CSV parser for the Frames package
+description: Alternative CSV parser for the Frames package. In cases
+             where the built-in Frames CSV parser does not work
+             (e.g. when dealing with data files that include newlines
+             embedded in data values), the parsers exposed here may
+             help.
 homepage:            https://github.com/acowley/Frames-dsv#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Anthony Cowley
 maintainer:          acowley@gmail.com
 copyright:           2018 Anthony Cowley
-category:            Web
+category:            Data
 build-type:          Simple
 extra-source-files:  README.md
+                     CHANGELOG.md
+                     test/data/multiline.csv
 cabal-version:       >=1.10
 
 library
@@ -18,7 +24,7 @@ library
   exposed-modules:     Frames.Dsv
   build-depends:       base >= 4.7 && < 5
                      , bytestring
-                     , Frames
+                     , Frames >= 0.6
                      , vinyl
                      , hw-dsv >= 0.3 && < 0.4
                      , pipes >= 4.1 && < 5
