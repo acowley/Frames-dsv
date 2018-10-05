@@ -1,5 +1,5 @@
 name:                Frames-dsv
-version:             0.1.0.0
+version:             0.1.1
 synopsis:            Alternative CSV parser for the Frames package
 description: Alternative CSV parser for the Frames package. In cases
              where the built-in Frames CSV parser does not work

@@ -1,4 +1,11 @@
 {-# LANGUAGE TypeOperators #-}
+-- | CSV parsers for use with the @Frames@ package.
+--
+-- Most commonly used are 'dsvTableTypes' for generating type
+-- definitions at compile time based on a CSV file, and 'readDsvTable'
+-- to load the table at run time. These are comparable to @tableTypes@
+-- and @readTable@ from the @Frames@ package, but use an alternative
+-- CSV parser.
 module Frames.Dsv where
 import Control.Monad (when)
 import qualified Data.ByteString as BS
