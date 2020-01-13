@@ -25,6 +25,7 @@ import Frames.CSV (ReadRec(..), Separator, ParserOptions(..))
 import Frames.TH (rowGen, RowGen(..), tableTypes')
 
 import qualified HaskellWorks.Data.Dsv.Lazy.Cursor as SVL
+import qualified HaskellWorks.Data.Dsv.Lazy.Cursor.Strict as SVLS
 
 import Pipes (MonadIO, Producer, (>->), yield)
 import qualified Pipes as P
@@ -38,7 +39,7 @@ import Language.Haskell.TH
 rowLoop :: Monad m => SVL.DsvCursor -> Producer [BS.ByteString] m ()
 rowLoop c =
   if SVL.dsvCursorPosition d > SVL.dsvCursorPosition c && not (SVL.atEnd c)
-  then do yield (V.toList (SVL.getRowBetweenStrict c d dEnd))
+  then do yield (SVLS.getRowListBetween c d dEnd)
           rowLoop (SVL.trim d)
   else return ()
   where nr = SVL.nextRow c

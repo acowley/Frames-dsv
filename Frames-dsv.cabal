@@ -1,5 +1,5 @@
 name:                Frames-dsv
-version:             0.1.1
+version:             0.1.2
 synopsis:            Alternative CSV parser for the Frames package
 description: Alternative CSV parser for the Frames package. In cases
              where the built-in Frames CSV parser does not work
@@ -27,7 +27,7 @@ library
                      , bytestring
                      , Frames >= 0.6
                      , vinyl
-                     , hw-dsv >= 0.3 && < 0.4
+                     , hw-dsv >= 0.3 && < 0.5
                      , pipes >= 4.1 && < 5
                      , text
                      , vector
